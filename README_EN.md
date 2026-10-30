@@ -57,7 +57,7 @@ Use JDK 21 to run Gradle; the output targets Java 17. Chinese Maven mirrors are 
 ./gradlew test build sourceArchive
 ```
 
-JARs are in `build/libs/`, and the complete source project ZIP is in `build/distributions/`. See [docs/VALIDATION.md](docs/VALIDATION.md) for validation and outstanding in-game checks. Iris/Sodium, shaders and other UI mods are unverified. This version uses Minecraft's pixel font; DangoMusic's smooth-font system has not been migrated.
+JARs are in `build/libs/`, and the complete source project ZIP is in `build/distributions/`. Iris/Sodium, shaders and other UI mods are unverified. This version uses Minecraft's pixel font; DangoMusic's smooth-font system has not been migrated.
 
 ## License and credits
 

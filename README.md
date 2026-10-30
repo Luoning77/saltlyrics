@@ -58,7 +58,7 @@ Salt Player 与 [SaltBridge](https://github.com/Luoning77/saltbridge) 需在同�
 ./gradlew test build sourceArchive
 ```
 
-产物位于 `build/libs/`；完整源码工程压缩包在 `build/distributions/`。验证状态和游戏实测清单见 [docs/VALIDATION.md](docs/VALIDATION.md)。光影、Iris/Sodium 和其他界面 Mod 的兼容性尚未验证。首版保留原版像素字体路径，未迁移 DangoMusic 的平滑字体系统。
+产物位于 `build/libs/`；完整源码工程压缩包在 `build/distributions/`。光影、Iris/Sodium 和其他界面 Mod 的兼容性尚未验证。首版保留原版像素字体路径，未迁移 DangoMusic 的平滑字体系统。
 
 ## 📄 许可证与致谢
 
