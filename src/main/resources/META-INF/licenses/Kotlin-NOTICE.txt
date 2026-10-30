@@ -1,0 +1,8 @@
+Kotlin standard library
+Copyright JetBrains s.r.o. and Kotlin Programming Language contributors.
+Licensed under Apache License 2.0 (Apache-2.0.txt).
+Source: https://github.com/JetBrains/kotlin
+
+JetBrains annotations (transitive dependency)
+Licensed under Apache License 2.0 (Apache-2.0.txt).
+Source: https://github.com/JetBrains/java-annotations
