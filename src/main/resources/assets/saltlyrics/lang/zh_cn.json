@@ -67,5 +67,16 @@
   "saltlyrics.glow.tip": "使用离屏柔光；若显卡不支持，会自动保留基础歌词。",
   "key.saltlyrics.toggle": "开关 3D 歌词",
   "key.categories.saltlyrics": "盐词",
-  "saltlyrics.progress": "进度：%s / %s"
+  "saltlyrics.progress": "进度：%s / %s",
+  "saltlyrics.text.custom": "自定义",
+  "saltlyrics.rgb.open": "自定义 RGB…",
+  "saltlyrics.rgb.title": "自定义歌词颜色",
+  "saltlyrics.rgb.hint": "拖动滑块或输入 0–255，实时预览",
+  "saltlyrics.rgb.red": "红 R",
+  "saltlyrics.rgb.green": "绿 G",
+  "saltlyrics.rgb.blue": "蓝 B",
+  "saltlyrics.rgb.channel": "%s：%s",
+  "saltlyrics.rgb.preview": "歌词颜色预览",
+  "saltlyrics.translations": "显示翻译：%s",
+  "saltlyrics.translations.tip": "在原文下方显示播放器提供的翻译。关闭后只显示原文。"
 }

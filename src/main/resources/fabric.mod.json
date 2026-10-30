@@ -11,10 +11,18 @@
     "Sorihiko and DangoMusic contributors (derived rendering code)"
   ],
   "license": "GPL-3.0-only",
+  "contact": {
+    "homepage": "https://github.com/Luoning77/saltlyrics",
+    "sources": "https://github.com/Luoning77/saltlyrics",
+    "issues": "https://github.com/Luoning77/saltlyrics/issues"
+  },
   "environment": "client",
   "entrypoints": {
     "client": [
       "com.luoning.saltlyrics.SaltLyricsClient"
+    ],
+    "modmenu": [
+      "com.luoning.saltlyrics.compat.ModMenuIntegration"
     ]
   },
   "depends": {
@@ -23,7 +31,11 @@
     "minecraft": "1.20.1",
     "java": ">=17"
   },
+  "suggests": {
+    "modmenu": "*"
+  },
   "mixins": [
     "saltlyrics.mixins.json"
-  ]
+  ],
+  "icon": "assets/saltlyrics/icon.png"
 }

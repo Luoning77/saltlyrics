@@ -17,8 +17,9 @@ object LyricsConfig {
     var stayOnScreen = false
     var aboveGround = false
     var splitLines = true
+    var showTranslations = true
     var wordPop = true
-    var wiggle = true
+    var wiggle = false
     var wiggleFps = 8
     var wiggleAmount = 0.8f
     var glow = true
@@ -42,6 +43,7 @@ object LyricsConfig {
             enabled=b("enabled",enabled); facePlayer=b("facePlayer",facePlayer)
             keepAway=b("keepAway",keepAway); stayOnScreen=b("stayOnScreen",stayOnScreen)
             aboveGround=b("aboveGround",aboveGround); splitLines=b("splitLines",splitLines)
+            showTranslations=b("showTranslations",showTranslations)
             wordPop=b("wordPop",wordPop); wiggle=b("wiggle",wiggle); glow=b("glow",glow)
             scale=n("scale",scale,0.5f,3f); distance=n("distance",distance,3f,40f)
             spread=n("spread",spread,0f,60f); wiggleAmount=n("wiggleAmount",wiggleAmount,0f,2f)
@@ -59,7 +61,7 @@ object LyricsConfig {
         val values = linkedMapOf<String,Any>(
             "enabled" to enabled,"scale" to scale,"distance" to distance,"spread" to spread,
             "facePlayer" to facePlayer,"keepAway" to keepAway,"stayOnScreen" to stayOnScreen,
-            "aboveGround" to aboveGround,"splitLines" to splitLines,"wordPop" to wordPop,
+            "aboveGround" to aboveGround,"splitLines" to splitLines,"showTranslations" to showTranslations,"wordPop" to wordPop,
             "wiggle" to wiggle,"wiggleFps" to wiggleFps,"wiggleAmount" to wiggleAmount,
             "glow" to glow,"glowStrength" to glowStrength,"glowRadius" to glowRadius,
             "glowColor" to glowColor,"textRgb" to textRgb,"offsetMs" to offsetMs,"port" to SaltConfig.port)

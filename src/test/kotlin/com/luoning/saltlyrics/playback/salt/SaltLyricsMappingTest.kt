@@ -14,6 +14,25 @@ class SaltLyricsMappingTest {
         SaltApi.parseLyrics(JsonParser().parse(json).asJsonObject),
     )
 
+    @Test fun explicitTranslationFieldSurvivesParsingAndMapping() {
+        val result = lyrics("""{"lines":[{
+            "startMs":100,"endMs":400,"text":"Hello","translation":"你好",
+            "cells":[{"startMs":100,"endMs":400,"text":"Hello"}],"timesValid":true
+        }]}""")
+        val line = result.lines.single()
+        assertEquals("Hello", line.text)
+        assertEquals(listOf("你好"), line.translations)
+        assertEquals("Hello", line.words!!.single().text)
+    }
+
+    @Test fun fieldAndParallelRowDoNotDuplicateTheSameTranslation() {
+        val result = lyrics("""{"lines":[
+            {"startMs":100,"endMs":400,"text":"Hello","translation":"你好","timesValid":true},
+            {"startMs":100,"endMs":400,"text":"你好","timesValid":true}
+        ]}""")
+        assertEquals(listOf("你好"), result.lines.single().translations)
+    }
+
     @Test fun wordLyricsKeepRealWordTimes() {
         val result = lyrics("""{"lines":[{
             "startMs":100,"endMs":400,"text":"测试","timesValid":true,

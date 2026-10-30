@@ -67,5 +67,16 @@
   "saltlyrics.glow.tip": "Offscreen glow; falls back to plain lyrics if unsupported.",
   "key.saltlyrics.toggle": "Toggle 3D lyrics",
   "key.categories.saltlyrics": "Salt Lyrics",
-  "saltlyrics.progress": "Position: %s / %s"
+  "saltlyrics.progress": "Position: %s / %s",
+  "saltlyrics.text.custom": "Custom",
+  "saltlyrics.rgb.open": "Custom RGB…",
+  "saltlyrics.rgb.title": "Custom Lyric Color",
+  "saltlyrics.rgb.hint": "Drag sliders or enter 0–255 to preview",
+  "saltlyrics.rgb.red": "Red R",
+  "saltlyrics.rgb.green": "Green G",
+  "saltlyrics.rgb.blue": "Blue B",
+  "saltlyrics.rgb.channel": "%s: %s",
+  "saltlyrics.rgb.preview": "Lyric color preview",
+  "saltlyrics.translations": "Show translations: %s",
+  "saltlyrics.translations.tip": "Show player-provided translations below the original. Turn off for original lyrics only."
 }

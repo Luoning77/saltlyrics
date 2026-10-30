@@ -62,6 +62,7 @@ class LyricsSettingsScreen(private val parent: Screen?) : Screen(tr("saltlyrics.
                 toggle("saltlyrics.stay",3,1,{LyricsConfig.stayOnScreen},{LyricsConfig.stayOnScreen=it})
                 toggle("saltlyrics.ground",4,0,{LyricsConfig.aboveGround},{LyricsConfig.aboveGround=it})
                 toggle("saltlyrics.split",4,1,{LyricsConfig.splitLines},{LyricsConfig.splitLines=it})
+                toggle("saltlyrics.translations",5,0,{LyricsConfig.showTranslations},{LyricsConfig.showTranslations=it})
             }
             2 -> {
                 toggle("saltlyrics.wordPop",0,0,{LyricsConfig.wordPop},{LyricsConfig.wordPop=it})
@@ -74,9 +75,14 @@ class LyricsSettingsScreen(private val parent: Screen?) : Screen(tr("saltlyrics.
                 }
                 slider("saltlyrics.glowStrength",3,0,0.0,3.0,LyricsConfig.glowStrength.toDouble(),0.05){LyricsConfig.glowStrength=it.toFloat()}
                 slider("saltlyrics.glowRadius",3,1,0.0,1.0,LyricsConfig.glowRadius.toDouble(),0.05){LyricsConfig.glowRadius=it.toFloat()}
-                button(tr("saltlyrics.textColor",tr("saltlyrics.text.${listOf(0xF7E1D7,0xFFFFFF,0xF2A7C3,0x8ECFFF).indexOf(LyricsConfig.textRgb).coerceAtLeast(0)}")),width/2-154,top+96,308) {
-                    val colors=listOf(0xF7E1D7,0xFFFFFF,0xF2A7C3,0x8ECFFF)
+                val colors=listOf(0xF7E1D7,0xFFFFFF,0xF2A7C3,0x8ECFFF)
+                val preset=colors.indexOf(LyricsConfig.textRgb)
+                val colorName=if(preset>=0) tr("saltlyrics.text.$preset") else tr("saltlyrics.text.custom")
+                button(tr("saltlyrics.textColor",colorName),width/2-154,top+96) {
                     LyricsConfig.textRgb=colors[(colors.indexOf(LyricsConfig.textRgb)+1)%colors.size]; rebuildWidgets()
+                }
+                button(tr("saltlyrics.rgb.open"),width/2+4,top+96) {
+                    minecraft!!.setScreen(RgbColorScreen(this))
                 }
             }
         }

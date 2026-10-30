@@ -21,6 +21,10 @@ base { archivesName.set("SaltLyrics") }
 repositories {
     maven("https://maven.aliyun.com/repository/public")
     mavenCentral()
+    exclusiveContent {
+        forRepository { maven("https://maven.terraformersmc.com/releases/") }
+        filter { includeGroup("com.terraformersmc") }
+    }
 }
 val shade by configurations.creating
 configurations.implementation { extendsFrom(shade) }
@@ -29,6 +33,8 @@ dependencies {
     mappings(loom.officialMojangMappings())
     modImplementation("net.fabricmc:fabric-loader:0.16.10")
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.92.2+1.20.1")
+    // Optional integration: compile against the API without bundling or requiring Mod Menu.
+    modCompileOnly("com.terraformersmc:modmenu:7.2.2") { isTransitive = false }
     shade(kotlin("stdlib"))
     testImplementation("junit:junit:4.13.2")
 }

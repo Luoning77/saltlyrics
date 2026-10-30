@@ -1,5 +1,7 @@
 # Salt Lyrics
 
+![Salt Lyrics banner: floating bilingual lyrics in a voxel valley at dusk](docs/assets/saltlyrics-cover.png)
+
 3D floating lyrics for the song playing in Salt Player, inside Minecraft.
 
 English | [简体中文](README.md)
@@ -14,6 +16,7 @@ This independent mod derives its lyric rendering from DangoMusic by Sorihiko and
 | Animation | Adjustable wiggle and multi-level glow |
 | Placement | Scale, distance, spread, camera facing and view-following options |
 | Synchronization | Background SaltBridge polling, playback clock, lyric updates and timing offset |
+| Bilingual lyrics | Original above translation; supports the translation field and parallel rows sharing a timestamp |
 | Settings | Connection, transport controls and appearance inside Minecraft Options |
 
 No ordinary screen lyric overlay, separate player panel, music search or account login. Audio is played by Salt Player. Servers do not need the mod.
@@ -27,6 +30,8 @@ Requires Minecraft **1.20.1**, Fabric Loader **0.16.10+**, the matching Fabric A
 3. Open **Options → Salt Lyrics Settings** (top right). Automatic pairing is used by default; otherwise copy the access token and use **Paste token**.
 4. Enter a world and adjust placement and appearance in Settings.
 
+With the optional Mod Menu installed, select Salt Lyrics in the mod list and click its configuration button to open the same settings screen. The Options entry remains available without Mod Menu.
+
 The lyric toggle key is unbound by default and can be assigned in Controls. F1 also hides lyrics. Apply port changes with **Apply and reconnect**. The position slider submits a seek when released. Appearance changes preview immediately and are saved with **Done**. A positive timing offset selects a later lyric position.
 
 ## Configuration
@@ -39,6 +44,10 @@ The lyric toggle key is unbound by default and can be assigned in Controls. F1 a
 | `version.properties` | Single project version source; local builds never increment it |
 
 Real word timing is used when supplied by the player. For line-only lyrics, word-pop and line-splitting times are estimated animation. No external lyric search is performed.
+
+Bilingual text follows the player-provided order. Original lyrics retain their word animation; translations fade in as complete lines. Paired cues stay together instead of splitting each language independently, and long text wraps visually. No translation is generated when the player supplies none.
+
+Placement → Show translations is enabled by default. Turn it off to display only the original, then click Done to save.
 
 ## Build
 

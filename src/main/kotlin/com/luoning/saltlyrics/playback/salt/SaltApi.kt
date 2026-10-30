@@ -74,6 +74,7 @@ class SaltApi(
             val text: String,
             val timesValid: Boolean,
             val cells: List<Cell>,
+            val translation: String = "",
         )
         class Cell(val startMs: Long, val endMs: Long, val text: String)
     }
@@ -236,6 +237,7 @@ class SaltApi(
                         text = str(o, "text"),
                         timesValid = bool(o, "timesValid", true),
                         cells = cells,
+                        translation = str(o, "translation"),
                     )
                 }
             }

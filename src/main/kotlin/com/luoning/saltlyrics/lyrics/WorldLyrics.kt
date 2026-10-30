@@ -18,6 +18,7 @@ class WorldLyrics {
         val lines: List<String>, val startMs: Long, val revealMs: Long,
         var x: Double, var y: Double, var z: Double, var yaw: Float, var pitch: Float,
         val charTimes: LongArray = LongArray(0),
+        val originalLineCount: Int = lines.size,
     ) {
         var fadeStartNanos = 0L
         var vYaw = 0.0
@@ -187,13 +188,15 @@ class WorldLyrics {
         val text = line.text
         val startMs = line.timeMs
         val ct = charTimes(line, nextMs)
-        val lines = wrap(text, 200)
-        val chars = lines.sumOf { it.length }
+        val originalLines = wrap(text, 200)
+        val translations = if (LyricsConfig.showTranslations) line.translations.flatMap { wrap(it, 200) } else emptyList()
+        val lines = originalLines + translations
+        val chars = originalLines.sumOf { it.length }
         val lineDur = (nextMs - startMs).coerceAtLeast(400L)
         val reveal = min((chars * 55L).coerceAtLeast(250L), (lineDur * 0.6).toLong())
 
         val player = RenderPlatform.player
-        if (player == null) return Floating(lines, startMs, reveal, 0.0, 0.0, 0.0, 0f, 0f, ct)
+        if (player == null) return Floating(lines, startMs, reveal, 0.0, 0.0, 0.0, 0f, 0f, ct, originalLines.size)
         val yaw = player.yaw + (random.nextFloat() * 2f - 1f) * LyricsConfig.spread
         val d = LyricsConfig.distance.toDouble()
         var pitch = (player.pitch - 3f - random.nextFloat() * 10f).coerceIn(-60f, 30f)
@@ -206,7 +209,7 @@ class WorldLyrics {
         val ex = player.eyeX
         val ey = player.eyeY
         val ez = player.eyeZ
-        return Floating(lines, startMs, reveal, ex + dx * d, ey + dy * d, ez + dz * d, yaw, pitch, ct)
+        return Floating(lines, startMs, reveal, ex + dx * d, ey + dy * d, ez + dz * d, yaw, pitch, ct, originalLines.size)
     }
 
     /** 按像素宽度换行：英文在空格处断，中日韩可以在任意字之间断 */
@@ -299,15 +302,16 @@ class WorldLyrics {
      * 逐字出现：每个字按顺序在 revealMs 内依次淡入并从下往上浮起一点；
      * 发光由 [DeepGlow] 另外做（先把字画到发光画布上），这里只画字本身。
      */
-    private fun drawAnimated(lines: List<String>, elapsedMs: Long, revealMs: Long, alphaMul: Float, charTimes: LongArray? = null) {
+    private fun drawAnimated(lines: List<String>, originalLineCount: Int, elapsedMs: Long, revealMs: Long, alphaMul: Float, charTimes: LongArray? = null) {
         val flashMode = charTimes != null && charTimes.isNotEmpty()
         var n = 0   // 非空白字符序号
-        val total = lines.sumOf { it.length }.coerceAtLeast(1)
+        val originalLines = lines.take(originalLineCount)
+        val total = originalLines.sumOf { it.length }.coerceAtLeast(1)
         val lineH = 11f
         var y = -(lines.size * lineH) / 2f
         var k = 0
         val glyphs = ArrayList<Glyph>()
-        for (line in lines) {
+        for (line in originalLines) {
             var x = -strW(line) / 2f
             for (c in line) {
                 if (flashMode && !c.isWhitespace()) {
@@ -327,6 +331,20 @@ class WorldLyrics {
                     a = a * a * (3f - 2f * a)                 // smoothstep
                     val alpha = a * alphaMul
                     if (alpha > 0.02f && !c.isWhitespace()) glyphs += Glyph(c, x, y + (1f - a) * 5f, alpha, k)
+                }
+                x += charW(c)
+                k++
+            }
+            y += lineH
+        }
+        // Translations have no reliable per-word correspondence with the original.
+        // Fade them in together, without reusing the original's word timestamps.
+        val translationAlpha = (elapsedMs / 200f).coerceIn(0f, 1f) * alphaMul
+        for (line in lines.drop(originalLineCount)) {
+            var x = -strW(line) / 2f
+            for (c in line) {
+                if (translationAlpha > 0.02f && !c.isWhitespace()) {
+                    glyphs += Glyph(c, x, y, translationAlpha, k)
                 }
                 x += charW(c)
                 k++
@@ -490,7 +508,7 @@ class WorldLyrics {
             }
             val s = 0.03f * LyricsConfig.scale * (LyricsConfig.distance / 6.5f)
             world.push(rx, ry + lift, rz, yaw, pitch, s)
-            drawAnimated(f.lines, songNow - f.startMs, f.revealMs, alphaMul, if (LyricsConfig.wordPop) f.charTimes else null)
+            drawAnimated(f.lines, f.originalLineCount, songNow - f.startMs, f.revealMs, alphaMul, if (LyricsConfig.wordPop) f.charTimes else null)
             world.pop()
         }
 

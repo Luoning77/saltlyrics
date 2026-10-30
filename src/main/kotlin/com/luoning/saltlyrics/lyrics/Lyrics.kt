@@ -17,13 +17,32 @@ class LyricLine(
     val words: List<LyricWord>? = null,
     val endMs: Long? = null,
     val timesValid: Boolean = true,
+    /** Translation field contents and additional rows at the same timestamp, in host order. */
+    val translations: List<String> = emptyList(),
 )
 
 class Lyrics(rawLines: List<LyricLine>, val sourceName: String) {
     /** 去掉"纯音乐，请欣赏"这类提示（网易云给没歌词的歌塞的一句话） */
-    private val raw: List<LyricLine> = rawLines.filterNot { isPlaceholder(it.text) }
+    private val raw: List<LyricLine> = parallelLines(rawLines.filterNot { isPlaceholder(it.text) })
 
     companion object {
+        /** Exact timestamps only: never guess a translation from a nearby lyric line. */
+        private fun parallelLines(lines: List<LyricLine>): List<LyricLine> =
+            lines.groupBy { it.timeMs }.toSortedMap().flatMap { (_, sameTime) ->
+                // Invalid rows must not acquire a valid timestamp from a neighboring row.
+                val valid = sameTime.filter { it.timesValid && it.text.isNotBlank() }
+                val invalid = sameTime.filter { !it.timesValid }
+                if (valid.isEmpty()) sameTime else if (valid.size == 1) valid + invalid else {
+                    val first = valid.first()
+                    val translations = (first.translations + valid.drop(1).flatMap { listOf(it.text) + it.translations })
+                        .filter { it.isNotBlank() && it != first.text }.distinct()
+                    // Some line-only hosts end the first row at the identical timestamp
+                    // of its translation. Use the shared group's positive end, if known.
+                    val end = valid.mapNotNull { it.endMs?.takeIf { end -> end > first.timeMs } }.maxOrNull()
+                    listOf(LyricLine(first.timeMs, first.text, first.words, end, true, translations)) + invalid
+                }
+            }
+
         fun isPlaceholder(text: String): Boolean {
             val t = text.filter { it.isLetterOrDigit() }.lowercase()
             if (t.isEmpty()) return false
@@ -102,6 +121,12 @@ object LyricSplit {
     fun split(lines: List<LyricLine>): List<LyricLine> {
         val out = ArrayList<LyricLine>(lines.size)
         for ((li, line) in lines.withIndex()) {
+            // Splitting each language independently creates unrelated estimated timestamps.
+            // Keep the paired text together; the renderer wraps each language visually.
+            if (line.translations.isNotEmpty()) {
+                out += line
+                continue
+            }
             val nextMs = lines.getOrNull(li + 1)?.timeMs
             val segs = segments(line, nextMs)
             if (segs.size <= 1) {

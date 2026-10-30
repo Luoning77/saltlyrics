@@ -340,7 +340,8 @@ class SaltSessionSource(
                     LyricWord(c.startMs, (c.endMs - c.startMs).coerceAtLeast(0L), c.text)
                 }
             } else null
-            LyricLine(l.startMs, l.text, words, l.endMs, l.timesValid)
+            val translations = l.translation.lines().filter { it.isNotBlank() && it != l.text }.distinct()
+            LyricLine(l.startMs, l.text, words, l.endMs, l.timesValid, translations)
         }
         return Lyrics(lines, "Salt Player")
     }

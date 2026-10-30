@@ -37,6 +37,10 @@ The Fabric 1.20.1 Gradle configuration is adapted from DangoMusic's modern build
 Gradle wrapper files are copied from that project; Gradle is licensed separately
 under Apache-2.0: https://github.com/gradle/gradle/blob/v9.2.1/LICENSE.
 
+Additional changes: lyric parsing retains SaltBridge's translation field; same-time
+rows form bilingual cues, with original word timing preserved and translations
+rendered below as whole lines. Paired cues are not independently split.
+
 No DangoMusic logos, bundled fonts, music services, player panel, or account
 management are included. Minecraft and Fabric dependencies retain their own licenses.
 Kotlin standard library is bundled under Apache-2.0 (the Apache license and attribution are included in
